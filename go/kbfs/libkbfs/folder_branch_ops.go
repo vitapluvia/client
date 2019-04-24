@@ -8852,6 +8852,10 @@ func (fbo *folderBranchOps) SetSyncConfig(
 		fbo.log.CDebugf(ctx, "Starting full deep sync")
 		_ = fbo.kickOffRootBlockFetch(ctx, md)
 	}
+
+	fbo.config.Reporter().Notify(ctx, syncConfigChangeNotification(
+		md.GetTlfHandle(), config))
+
 	return ch, nil
 }
 
