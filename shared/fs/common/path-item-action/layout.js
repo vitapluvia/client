@@ -72,7 +72,7 @@ const getRawLayout = (
         ...empty,
         ...(mode === 'screen'
           ? {
-              newFolder: pathItem.type === 'folder',
+              newFolder: pathItem.writable && pathItem.type === 'folder',
               openChatNonTeam: parsedPath.kind === 'group-tlf',
               openChatTeam: parsedPath.kind === 'team-tlf',
             }
@@ -95,7 +95,7 @@ const getRawLayout = (
             }
           : {}),
         copyPath: true,
-        delete: pathItem.type === 'file' || flags.enableDeleteFolder,
+        delete: (pathItem.writable && pathItem.type === 'file') || flags.enableDeleteFolder,
         download: pathItem.type === 'file' && !isIOS,
         moveOrCopy: true,
         saveMedia: isMobile && pathItem.type === 'file' && Constants.canSaveMedia(pathItem),
