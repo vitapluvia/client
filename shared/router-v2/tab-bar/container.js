@@ -20,6 +20,7 @@ type OwnProps = {|
 
 const mapStateToProps = state => ({
   _badgeNumbers: state.notifications.navBadges,
+  _walletsAcceptedDisclaimer: state.wallets.acceptedDisclaimer,
   fullname: TrackerConstants.getDetails(state, state.config.username).fullname || '',
   isWalletsNew: state.chat2.isWalletsNew,
   username: state.config.username,
@@ -27,9 +28,14 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   _onProfileClick: username => dispatch(ProfileGen.createShowUserProfile({username})),
-  _onTabClick: tab => {
+  _onTabClick: (tab, walletsAcceptedDisclaimer) => {
     if (ownProps.selectedTab === Tabs.peopleTab && tab !== Tabs.peopleTab) {
       dispatch(PeopleGen.createMarkViewed())
+    }
+    if (ownProps.selectedTab !== Tabs.walletsTab && tab === Tabs.walletsTab && !walletsAcceptedDisclaimer) {
+      // haven't accepted disclaimer, show onboarding and bail
+      dispatch(RouteTreeGen.createNavigateAppend({path: ['walletOnboarding']}))
+      return
     }
     dispatch(RouteTreeGen.createNavigateAppend({path: [tab]}))
   },
@@ -63,7 +69,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   onQuit: dispatchProps.onQuit,
   onSettings: dispatchProps.onSettings,
   onSignOut: dispatchProps.onSignOut,
-  onTabClick: (tab: Tabs.Tab) => dispatchProps._onTabClick(tab),
+  onTabClick: (tab: Tabs.Tab) => dispatchProps._onTabClick(tab, stateProps._walletsAcceptedDisclaimer),
   selectedTab: ownProps.selectedTab,
   username: stateProps.username,
 })
