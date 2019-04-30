@@ -4,7 +4,7 @@ import * as Types from '../../constants/types/fs'
 import * as Constants from '../../constants/fs'
 import * as Sb from '../../stories/storybook'
 import ResetBanner from './reset-banner'
-import OutOfSpaceBanner from './out-of-space-banner'
+import MainBanner from './main-banner/container'
 import SystemFileManagerIntegrationBanner from './system-file-manager-integration-banner'
 import KextPermissionPopup from './system-file-manager-integration-banner/kext-permission-popup'
 import {commonProvider} from '../common/index.stories'
@@ -22,6 +22,10 @@ const commonSystemFileManagerIntegrationBannerActions = {
 }
 
 export const bannerProvider = {
+  MainBanner: {
+    bannerType: 'out-of-space',
+    onRetry: Sb.action('retry the sync'),
+  },
   ResetBanner: ({path}: {path: Types.Path}) => ({
     ...resetBannerCommon,
     isUserReset: Types.pathToString(path) === '/keybase/private/me,reset',
@@ -103,5 +107,5 @@ export default () => {
         openSecurityPrefs={Sb.action('openSecurityPrefs')}
       />
     ))
-    .add('Out of space banner', () => <OutOfSpaceBanner onRetry={Sb.action('retry')} />)
+    .add('Out of space banner', () => <MainBanner />)
 }

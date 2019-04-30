@@ -38,7 +38,6 @@ class MobileHeader extends React.PureComponent<Props, State> {
         fullWidth={true}
         style={Styles.collapseStyles([styles.container, this.props.bannerType === 'offline' && styles.blue])}
       >
-        {this.props.bannerType === 'offline' && <Kb.Banner text="You are offline." color="blue" />}
         {this.state.filterExpanded ? (
           <Kbfs.FolderViewFilter path={this.props.path} onCancel={this._filterDone} />
         ) : (
